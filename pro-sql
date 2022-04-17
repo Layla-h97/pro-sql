@@ -1,0 +1,75 @@
+CREATE DATABASE store;
+
+CREATE TABLE products (
+id int PRIMARY KEY,
+name VARCHAR(10) NOT NULL,
+price int DEFAULT 0,
+status VARCHAR(10),
+created_at datetime ,
+CONSTRAINT const3 CHECK (status='valid' OR status='expired')
+);
+
+CREATE TABLE orders (
+id int ,
+user_id int,
+status VARCHAR(6),
+created_at datetime ,
+CONSTRAINT const2 CHECK (status='start' OR status='finish'),
+CONSTRAINT const4 DEFAULT GETDATE() created_at);
+
+CREATE TABLE users (
+id int PRIMARY KEY,
+full_name VARCHAR(20),
+email VARCHAR(20) unique,
+gender char(1) ,
+date_of_birth VARCHAR(15),
+created_at datetime,
+CONSTRAINT const CHECK (gender='F' OR gender='M')
+);
+
+CREATE TABLE order_products (
+quantity int DEFAULT 0 );
+
+CREATE TABLE countries (
+code int PRIMARY KEY,
+name VARCHAR(20) unique,
+continent_name VARCHAR(20) NOT NULL);
+
+
+
+
+ALTER TABLE orders
+ADD FOREIGN KEY (id) REFERENCES users(id);
+
+ALTER TABLE users
+ADD FOREIGN KEY (country_code) REFERENCES countries(code);
+
+ALTER TABLE order_products
+ADD FOREIGN KEY (order_id) REFERENCES orders(id);
+
+ALTER TABLE order_products
+ADD FOREIGN KEY (product_id) REFERENCES products(id);
+
+
+
+
+INSERT INTO order_products
+VALUES (5, 01, 6);
+
+INSERT INTO products
+VALUES (5, 'prod', 10000, 'valid', '20200212 0:00:00 PM');
+
+INSERT INTO orders
+VALUES (5, 6, 'finish', '20200212 0:00:00 PM');
+INSERT INTO users
+VALUES (5, 'Layla', 'laylahamad1997@gmail.com','F', '1997','20200212 0:00:00 PM',966);
+
+INSERT INTO countries
+VALUES (966, 'Saudi', 'Asia');
+
+UPDATE countries
+SET name = 'SA' ;
+
+DELETE FROM products
+WHERE id=5; 
+
